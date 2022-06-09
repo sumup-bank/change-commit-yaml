@@ -1,0 +1,19 @@
+name: Change and Commit Yaml
+author: SumUp
+description: This Action clones a repository, then changes a Yaml file inside it and pushes the changes
+branding:
+  icon: git-commit
+  color: gray-dark
+inputs:
+  filepath:
+    description: Path to the file to be changed
+    required: true
+  yamlpath:
+    description: Path to the yaml file to be changed
+    required: true
+  newvalue:
+    description: New value to be inserted in the yaml file
+    required: true
+runs:
+  using: docker
+  image: Dockerfile

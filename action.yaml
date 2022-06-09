@@ -5,6 +5,13 @@ branding:
   icon: git-commit
   color: gray-dark
 inputs:
+  repository:
+    description: The repository to clone and then push
+    required: true
+  ref:
+    description: The branch, tag or SHA to checkout
+    required: false
+    default: ''
   filepath:
     description: Path to the file to be changed
     required: true
@@ -15,5 +22,29 @@ inputs:
     description: New value to be inserted in the yaml file
     required: true
 runs:
-  using: docker
-  image: Dockerfile
+  using: composite
+  steps:
+    - uses: action/checkout@v3
+      with:
+        repository: ${{ inputs.repository }}
+        ref: ${{ inputs.ref }}
+        path: ccy-repo
+    - name: Change Yaml
+      uses: mikefarah/yq@v4.25.2
+      working-directory: ccy-repo
+      env:
+        FILEPATH: ${{ inputs.filepath }}
+        YAMLPATH: ${{ inputs.yamlpath }}
+        NEWVALUE: ${{ inputs.newvalue }}
+      with:
+        cmd: yq -i "$YAMLPATH = $NEWVALUE" $FILEPATH
+    - name: Commit and Push Changes
+      uses: EndBug/add-and-commit@v9.0.0
+      with:
+        add: ${{ inputs.filepath }}
+        author_name: GHActions
+        author_email: sumup@sumup.com
+        message: "Automated changes: ${{ inputs.filepath }}"
+        pull: --rebase --autostash
+    - run: rm -rf ccy-repo
+      shell: bash

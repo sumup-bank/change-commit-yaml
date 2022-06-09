@@ -31,16 +31,16 @@ runs:
         path: ccy-repo
     - name: Change Yaml
       uses: mikefarah/yq@v4.25.2
-      working-directory: ccy-repo
       env:
         FILEPATH: ${{ inputs.filepath }}
         YAMLPATH: ${{ inputs.yamlpath }}
         NEWVALUE: ${{ inputs.newvalue }}
       with:
-        cmd: yq -i "$YAMLPATH = $NEWVALUE" $FILEPATH
+        cmd: yq -i "$YAMLPATH = $NEWVALUE" ccy-repo/$FILEPATH
     - name: Commit and Push Changes
       uses: EndBug/add-and-commit@v9.0.0
       with:
+        cwd: ccy-repo
         add: ${{ inputs.filepath }}
         author_name: GHActions
         author_email: sumup@sumup.com

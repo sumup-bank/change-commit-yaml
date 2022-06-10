@@ -16,7 +16,7 @@ jobs:
         run: |
           echo ::set-output name=sha::$(git rev-parse HEAD)
       - name: Run Action
-        uses: sumup-bank/change-commit-yaml@main
+        uses: ./
         with:
           repository: sumup-bank/change-commit-yaml
           filepath: tests/tests.yaml

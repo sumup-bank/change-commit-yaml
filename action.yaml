@@ -26,17 +26,22 @@ runs:
   steps:
     - uses: actions/checkout@v3
       with:
+        token: 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
         repository: ${{ inputs.repository }}
         ref: ${{ inputs.ref }}
         path: ccy-repo
     - name: Change Yaml
-      uses: mikefarah/yq@v4.25.2
+      shell: bash
       env:
         FILEPATH: ${{ inputs.filepath }}
         YAMLPATH: ${{ inputs.yamlpath }}
         NEWVALUE: ${{ inputs.newvalue }}
-      with:
-        cmd: -i "$YAMLPATH = $NEWVALUE" ccy-repo/$FILEPATH
+        VERSION: v4.25.2
+        BINARY: yq_linux_amd64
+      run: |
+        wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - |\
+        tar xz && mv ${BINARY} /usr/local/bin/yq
+        yq -i "${YAMLPATH} = \"${NEWVALUE}\"" ${FILEPATH}
     - name: Commit and Push Changes
       uses: EndBug/add-and-commit@v9.0.0
       with:
@@ -46,5 +51,6 @@ runs:
         author_email: sumup@sumup.com
         message: "Automated changes: ${{ inputs.filepath }}"
         pull: --rebase --autostash
+        push: true
     - run: rm -rf ccy-repo
       shell: bash

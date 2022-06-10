@@ -26,10 +26,11 @@ steps:
 |-|-|-|-|
 |filepath|Path to Yaml file to be changed|N/A|Yes|
 |newvalue|New value to be inserted at `yamlpath`|N/A|Yes|
+|ref|The branch, tag or SHA to checkout|'main'|Yes|
 |repository|The repository to clone and then push|N/A|Yes|
 |yamlpath|Yaml path to the key that will have its value changed|N/A|Yes|
 |commitprefix|Prefix to be added to the commit message|'[CCY]'|No|
-|ref|The branch, tag or SHA to checkout|Branch or tag that triggered the workflow|No|
+|token|The token used to authenticate with GitHub|`${{ github.token }}`|No|
 
 ## Outputs
 

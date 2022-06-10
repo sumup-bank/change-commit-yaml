@@ -5,26 +5,29 @@ branding:
   icon: git-commit
   color: gray-dark
 inputs:
-  repository:
-    description: The repository to clone and then push
-    required: true
-  ref:
-    description: The branch, tag or SHA to checkout
-    required: false
-    default: ''
   filepath:
     description: Path to the file to be changed
     required: true
-  yamlpath:
-    description: Path to the yaml file to be changed
-    required: true
   newvalue:
     description: New value to be inserted in the yaml file
+    required: true
+  ref:
+    description: The branch, tag or SHA to checkout
+    required: true
+  repository:
+    description: The repository to clone and then push
+    required: true
+  yamlpath:
+    description: Path to the yaml file to be changed
     required: true
   commitprefix:
     description: Prefix to be added to the commit message
     required: false
     default: '[CCY]'
+  token:
+    description: The token used to authenticate with GitHub
+    default: ${{ github.token }}
+    required: false
 runs:
   using: composite
   steps:
@@ -33,6 +36,7 @@ runs:
         repository: ${{ inputs.repository }}
         ref: ${{ inputs.ref }}
         path: ccy-repo
+        token: ${{ inputs.token }}
     - name: Change Yaml
       shell: bash
       env:

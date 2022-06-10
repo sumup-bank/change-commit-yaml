@@ -8,6 +8,7 @@ on:
 jobs:
   test-action:
     name: Test Action
+    if: startsWith(github.event.head_commit.message, '[BOT]') == 'false'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

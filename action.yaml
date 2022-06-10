@@ -26,7 +26,6 @@ runs:
   steps:
     - uses: actions/checkout@v3
       with:
-        token: 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
         repository: ${{ inputs.repository }}
         ref: ${{ inputs.ref }}
         path: ccy-repo
@@ -39,18 +38,20 @@ runs:
         VERSION: v4.25.2
         BINARY: yq_linux_amd64
       run: |
-        wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - |\
+        wget -q https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - |\
         tar xz && mv ${BINARY} /usr/local/bin/yq
-        yq -i "${YAMLPATH} = \"${NEWVALUE}\"" ${FILEPATH}
+        yq -i "${YAMLPATH} = \"${NEWVALUE}\"" ccy-repo/${FILEPATH}
     - name: Commit and Push Changes
-      uses: EndBug/add-and-commit@v9.0.0
-      with:
-        cwd: ccy-repo
-        add: ${{ inputs.filepath }}
-        author_name: GHActions
-        author_email: sumup@sumup.com
-        message: "Automated changes: ${{ inputs.filepath }}"
-        pull: --rebase --autostash
-        push: true
+      working-directory: ccy-repo
+      shell: bash
+      run: |
+        git config --global user.email "sumup@sumup.com"
+        git config --global user.name "actions@github.com"
+        git add ${{ inputs.filepath }} || {
+          echo "No files were changed, so we did not commit anything"
+          exit 1
+        } && \
+        git commit -m "[BOT] Automated changes: ${{ inputs.filepath }}" && \
+        git push origin ${{ inputs.ref }}
     - run: rm -rf ccy-repo
       shell: bash

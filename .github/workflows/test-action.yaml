@@ -11,10 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Get Commit SHA
+        id: get-commit-sha
+        run: |
+          echo ::set-output name=sha::$(git rev-parse HEAD)
       - name: Run Action
         uses: sumup-bank/change-commit-yaml@main
         with:
           repository: sumup-bank/change-commit-yaml
           filepath: tests/tests.yaml
           yamlpath: .commit.hash
-          newvalue: ${{ env.GITHUB_SHA }}
+          newvalue: ${{ steps.get-commit-sha.outputs.sha }}

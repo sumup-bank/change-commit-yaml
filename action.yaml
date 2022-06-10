@@ -36,7 +36,7 @@ runs:
         YAMLPATH: ${{ inputs.yamlpath }}
         NEWVALUE: ${{ inputs.newvalue }}
       with:
-        cmd: yq -i "$YAMLPATH = $NEWVALUE" ccy-repo/$FILEPATH
+        cmd: -i "$YAMLPATH = $NEWVALUE" ccy-repo/$FILEPATH
     - name: Commit and Push Changes
       uses: EndBug/add-and-commit@v9.0.0
       with:

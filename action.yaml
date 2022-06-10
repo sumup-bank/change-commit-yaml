@@ -24,7 +24,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: action/checkout@v3
+    - uses: actions/checkout@v3
       with:
         repository: ${{ inputs.repository }}
         ref: ${{ inputs.ref }}

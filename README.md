@@ -28,6 +28,7 @@ steps:
 |filepath|Path to Yaml file to be changed|N/A|Yes|
 |yamlpath|Yaml path to the key that will have its value changed|N/A|Yes|
 |newvalue|New value to be inserted at `yamlpath`|N/A|Yes|
+|commitprefix|Prefix to be added to the commit message|'[CCY]'|No|
 
 ## Outputs
 

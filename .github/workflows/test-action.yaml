@@ -23,3 +23,4 @@ jobs:
           filepath: tests/tests.yaml
           yamlpath: .commit.hash
           newvalue: ${{ steps.get-commit-sha.outputs.sha }}
+          commitprefix: '[BOT]'
